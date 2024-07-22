@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Bash History</title>
+  </head>
+  <body>
+    <h1>KEEP Bash-History</h1>
+    {% for unit in KEEP %}
+        <div class="unit-container">
+            {{ unit[0] }} - {{ unit[1] }}
+            <textarea id="keep-input-{{ loop.index }}" rows="10" cols="50" placeholder="ここにテキストを入力してください"></textarea>
+        </div>
+    {% endfor %}
+
+    <h1>NEW Bash-History</h1>
+      {% for command, timestamp in send_this %}
+          <div>
+           <button onclick="handleClick('{{ loop.index }}')">{{loop.index}}</button> 
+            {{ command }} - {{ timestamp }}
+        </div>
+    {% endfor %}
+    <script>
+      function handleClick(index) {
+        fetch('rcv', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ index: index })
+        })
+        .then(response => response.json())
+      }
+    </script>
+  </body>
+</html>
