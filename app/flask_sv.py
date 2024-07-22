@@ -46,6 +46,16 @@ def receive_id():
     logging.debug(KEEP)
     return "ok"
 
+@app.route('/receive_input', methods=['POST'])
+def receive_input():
+    data = request.get_json()
+    index = data.get('index')
+    text = data.get('text')
+    logging.debug(text)
+    logging.debug(index)
+    logging.debug(kp_commands[int(index)-1])
+    return "ok"
+
 @app.route('/history', methods=['POST'])
 def update():
     global commands

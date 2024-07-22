@@ -12,6 +12,7 @@
         <div class="unit-container">
             {{ unit[0] }} - {{ unit[1] }}
             <textarea id="keep-input-{{ loop.index }}" rows="10" cols="50" placeholder="ここにテキストを入力してください"></textarea>
+            <button onclick="sendInput('{{ loop.index }}')">送信</button>
         </div>
     {% endfor %}
 
@@ -32,6 +33,18 @@
           body: JSON.stringify({ index: index })
         })
         .then(response => response.json())
+      }
+      function sendInput(index) {
+        const textarea = document.getElementById(`keep-input-${index}`);
+        const inputText = textarea.value;
+
+        fetch('receive_input', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ index: index, text: inputText })
+        });
       }
     </script>
   </body>
